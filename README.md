@@ -2,6 +2,9 @@
  ------------------------- ---------- -------- ------ ------------------------- 
   Name                      Method     Scheme   Host   Path                     
  ------------------------- ---------- -------- ------ ------------------------- 
+  citas_list                ANY        ANY      ANY    /citas                   
+  tratamiento_citas_list    ANY        ANY      ANY    /tratamiento_citas       
+  app_citas_new             GET|POST   ANY      ANY    /citas/new               
   app_tratamientos_index    GET        ANY      ANY    /tratamientos/           
   app_tratamientos_new      GET|POST   ANY      ANY    /tratamientos/new        
   app_tratamientos_show     GET        ANY      ANY    /tratamientos/{id}       
@@ -13,3 +16,4 @@
   app_usuarios_edit         GET|POST   ANY      ANY    /usuarios/{id}/edit      
   app_usuarios_delete       POST       ANY      ANY    /usuarios/{id}           
  ------------------------- ---------- -------- ------ ------------------------- 
+

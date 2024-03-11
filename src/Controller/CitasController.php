@@ -8,6 +8,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\CitasRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
+// Para el formulario
+use App\Form\CrearCitasType;
+use App\Entity\Citas;
+use Doctrine\ORM\EntityManagerInterface;
+
 
 class CitasController extends AbstractController
 {
@@ -17,7 +22,7 @@ class CitasController extends AbstractController
         
         $citas = $citasRepository->findAll();
 
-        // Preparando los datos para ser devueltos en formato JSON
+        // Preparando los datos para ser devueltos en formato JSON. Hace un JOIN con Usuarios
         $citasArray = [];
         foreach ($citas as $cita) {
             $citasArray[] = [
@@ -33,5 +38,51 @@ class CitasController extends AbstractController
         }
 
         return new JsonResponse($citasArray);
+    }
+
+    // JOIN Citas y Tratamientos
+    #[Route('/tratamiento_citas', name: 'tratamiento_citas_list')]
+    public function list_tto(CitasRepository $citasRepository, Request $request): Response
+    {
+        
+        $citas = $citasRepository->findAll();
+
+        // Preparando los datos para ser devueltos en formato JSON. Hace un JOIN con Usuarios
+        $citasArray = [];
+        foreach ($citas as $cita) {
+            $citasArray[] = [
+                //'id' => $cita->getId(),
+                'id_cita' => $cita->getIdCita(),
+                'usuario' => $cita->getDni()->getNombre(),
+                'id_tratamiento' => $cita->getIdTratamiento()->getNombreTratamiento(),
+                'fecha' => $cita->getFecha()->format('Y-m-d'),
+                'precio' => $cita->getIdTratamiento()->getPrecio(),
+                'pagado' => $cita->isPagado(),
+            ];
+        }
+
+        return new JsonResponse($citasArray);
+    }
+
+
+    // Para insertar nuevas citas mediante formulario
+    #[Route('citas/new', name: 'app_citas_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $cita = new Citas();
+        $form = $this->createForm(CrearCitasType::class, $cita);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($cita);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('citas_list', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('citas/new.html.twig', [
+            'cita' => $cita,
+            'form' => $form,
+        ]);
     }
 }
