@@ -24,6 +24,7 @@ class CitasController extends AbstractController
                 'id' => $cita->getId(),
                 'id_cita' => $cita->getIdCita(),
                 'dni' => $cita->getDni()->getDni(), 
+                'usuario' => $cita->getDni()->getNombre(),
                 'id_tratamiento' => $cita->getIdTratamiento()->getNombreTratamiento(),
                 'fecha' => $cita->getFecha()->format('Y-m-d'),
                 'pagado' => $cita->isPagado(),
