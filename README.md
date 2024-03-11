@@ -21,7 +21,7 @@
 
     c. Nuestra BBDD es 'islantilla'. Tiene tres entidades: usuarios, tratamientos, citas.
     
-    d. Para ver el proyecto podemos cargar las entidades entrando por terminal en Mysql y ejecutando:
+    d. Para ver el proyecto podemos cargar de datos las entidades por terminal en Mysql y ejecutando:
 
     USE islantilla;
     INSERT INTO usuarios (`dni`, `nombre`, `email`, `telefono`, `activo`) VALUES
